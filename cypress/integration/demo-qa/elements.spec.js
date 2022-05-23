@@ -4,6 +4,8 @@ import RadioButtonsPage from "../../pageObjects/RadioButtonsPage";
 import WebTablesPage from "../../pageObjects/WebTablesPage";
 import ButtonsPage from "../../pageObjects/ButtonsPage";
 import LinksPage from "../../pageObjects/LinksPage";
+import SelectGridPage from "../../pageObjects/SelectGridPage";
+import SelectPage from "../../pageObjects/SelectPage";
 
 context("Elements Page", () => {
   context("Text box scenarios", () => {
@@ -189,5 +191,41 @@ context("Elements Page", () => {
       LinksPage.createdLink.click();
       LinksPage.linkResponse.should("contain", "201");
     });
+  });
+});
+
+context("Select scenario", () => {
+  beforeEach(() => {
+      SelectPage.visit();
+  });
+  it.only("Select elements", () => {
+    //Click options
+    SelectPage.selectOne.click();
+    SelectPage.selectThree.click();
+    //Active ones selected
+    SelectPage.selectOne.invoke("attr", "class").should("contain", "active");
+    SelectPage.selectThree.invoke("attr", "class").should("contain", "active");
+    //Inactive ones not selected
+    SelectPage.selectTwo.invoke("attr", "class").should("not.contain", "active");
+    SelectPage.selectFour.invoke("attr", "class").should("not.contain", "active");
+  });
+});
+
+context("Grid select scenario", () => {
+  beforeEach(() => {
+    SelectablePage.gridTab.click();
+  });
+  it.only("Select grid elements", () => {
+    //Select grid options and check active
+    SelectGridPage.gridContains.contains("One").click().invoke('attr', 'class').should('contain', 'active');
+    SelectGridPage.gridContains.contains("Two").click().invoke('attr', 'class').should('contain', 'active');
+    SelectGridPage.gridContains.contains("Seven").click().invoke('attr', 'class').should('contain', 'active');
+    SelectGridPage.gridContains.contains("Nine").click().invoke('attr', 'class').should('contain', 'active');
+    SelectGridPage.gridContains.contains("Eight").click().invoke('attr', 'class').should('contain', 'active');
+    //Options to check for not active
+    SelectGridPage.gridContains.contains("Three").invoke('attr', 'class').should('not.contain', 'active');
+    SelectGridPage.gridContains.contains("Four").invoke('attr', 'class').should('not.contain', 'active');
+    SelectGridPage.gridContains.contains("Five").invoke('attr', 'class').should('not.contain', 'active');
+    SelectGridPage.gridContains.contains("Six").invoke('attr', 'class').should('not.contain', 'active');
   });
 });
